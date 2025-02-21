@@ -1,4 +1,3 @@
 # iot-project-uni268
 
-
-ini test commit
+Ini merupakan tahap rancangan tahap awal IoT dengan sensor dht11 dan pir motion sensor
