@@ -14,8 +14,7 @@ led = Pin(5, Pin.OUT)
 pir = Pin(4, Pin.IN)
 
 motion_count = 0
-motion_detected = 0
-motion_stopped_printed = False
+motion_detected = False
 
 prev_weather = {
     "temp": 0,
@@ -25,10 +24,6 @@ prev_weather = {
 def handle_interrupt(pin):
     global motion_detected
     motion_detected = pin.value()
-    if motion_detected:
-        led.value(1)
-    else:
-        led.value(0)
         
 pir.irq(trigger=(Pin.IRQ_RISING | Pin.IRQ_FALLING), handler=handle_interrupt)
 
@@ -44,15 +39,15 @@ def check_wifi():
 
 def build_payload():
     global motion_count
-    global motion_stopped_printed
+    global prev_weather
     
-    if motion_detected and not motion_stopped_printed:
+    if motion_detected:
+        led.on()
         print("Motion Detected!")
         motion_count += 1
-        motion_stopped_printed = True
-    elif not motion_detected and motion_stopped_printed:
+    elif not motion_detected:
+        led.off()
         print("Motion Stopped!")
-        motion_stopped_printed = False  
 
     print("Mengukur kondisi cuaca...\n", end="")
     sensor.measure()
@@ -107,14 +102,13 @@ def main():
         post_request(payload)
         time.sleep(2)
         print("Data Sent!")
-
     except KeyboardInterrupt:
         print("Keyboard Interrupt")
         pir.irq(trigger=0)
         led.value(0)
 
     except Exception as e:
-        print("An Unexpected error occurred:", e)
+        print(f"An Unexpected error occurred: {e}")
 
 if __name__ == "__main__":
     while True:
