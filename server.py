@@ -6,9 +6,11 @@ app = Flask(__name__)
 
 uri = "mongodb+srv://muhammadrafathrai:1snwDUNtakj0P5tY@clusteruni268.8hl4j.mongodb.net/?retryWrites=true&w=majority&appName=ClusterUNI268"
 db = "db_Uni268"
-my_collection = "collection_Uni268"
+collection = "collection_Uni268"
 
-client = connect_mongo(uri, db, my_collection)
+client = connect_mongo(uri, db, collection)
+
+my_collection = client[db][collection]
 
 UBIDOTS_TOKEN = "BBUS-NYDCvqxBKjKJwImVr9gMrSZ22IsMCR"
 UBIDOTS_DEVICE_LABEL = "esp32-uni268"

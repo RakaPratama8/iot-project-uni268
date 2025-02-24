@@ -5,9 +5,9 @@ import ujson
 import network
 import requests
 
-FLASK_SERVER_URL = 'http://192.168.1.100:5000/receive_data' # Ganti IP Address dengan IP Address Flask Server
-SSID = ""
-PASSWORD = ""
+FLASK_SERVER_URL = 'http://192.168.4.199/receive_data'
+SSID = "Earnny666"
+PASSWORD = "oc500rf2542"
 
 sensor = dht.DHT11(Pin(2))
 led = Pin(5, Pin.OUT)
@@ -113,4 +113,4 @@ def main():
 if __name__ == "__main__":
     while True:
         main()
-        time.sleep(5)
+        time.sleep(10)
