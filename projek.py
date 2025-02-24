@@ -5,7 +5,7 @@ import ujson
 import network
 import requests
 
-FLASK_SERVER_URL = 'http://192.168.4.199/receive_data'
+FLASK_SERVER_URL = 'http://192.168.248.199/receive_data'
 SSID = "Earnny666"
 PASSWORD = "oc500rf2542"
 

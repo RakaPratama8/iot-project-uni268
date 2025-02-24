@@ -4,7 +4,7 @@ import requests
 
 app = Flask(__name__)
 
-uri = "mongodb+srv://muhammadrafathrai:1snwDUNtakj0P5tY@clusteruni268.8hl4j.mongodb.net/?retryWrites=true&w=majority&appName=ClusterUNI268"
+uri = "mongodb+srv://muhammadrafathrai:O3QVORHbJD3Fz9Sk@clusteruni268.8hl4j.mongodb.net/?retryWrites=true&w=majority&appName=ClusterUNI268"
 db = "db_Uni268"
 collection = "collection_Uni268"
 
