@@ -5,7 +5,7 @@ import ujson
 import network
 import requests
 
-FLASK_SERVER_URL = 'http://192.168.248.199/receive_data'
+FLASK_SERVER_URL = 'http://192.168.248.199:5000/receive_data'
 SSID = "Earnny666"
 PASSWORD = "oc500rf2542"
 
@@ -14,16 +14,15 @@ led = Pin(5, Pin.OUT)
 pir = Pin(4, Pin.IN)
 
 motion_count = 0
-motion_detected = False
-
+prev_motion_state = False
 prev_weather = {
     "temp": 0,
     "humidity": 0,
 }
 
 def handle_interrupt(pin):
-    global motion_detected
-    motion_detected = pin.value()
+    global prev_motion_state
+    prev_motion_state = pin.value()
         
 pir.irq(trigger=(Pin.IRQ_RISING | Pin.IRQ_FALLING), handler=handle_interrupt)
 
@@ -40,12 +39,14 @@ def check_wifi():
 def build_payload():
     global motion_count
     global prev_weather
+    global prev_motion_state
     
-    if motion_detected:
+    if prev_motion_state:
         led.on()
         print("Motion Detected!")
         motion_count += 1
-    elif not motion_detected:
+        prev_motion_state = False
+    elif not prev_motion_state:
         led.off()
         print("Motion Stopped!")
 
