@@ -1,16 +1,21 @@
 from flask import Flask, request, jsonify
+from db import connect_mongo
 import requests
 
 app = Flask(__name__)
 
-# Optional: If you want to forward data to Ubidots
-UBIDOTS_TOKEN = "BBUS-mpvW9St6JezzvLIUplyCyJ1K8x6bIR"
-UBIDOTS_DEVICE_LABEL = "esp32-sic6"
+uri = "mongodb+srv://muhammadrafathrai:1snwDUNtakj0P5tY@clusteruni268.8hl4j.mongodb.net/?retryWrites=true&w=majority&appName=ClusterUNI268"
+db = "db_Uni268"
+my_collection = "collection_Uni268"
+
+client = connect_mongo(uri, db, my_collection)
+
+UBIDOTS_TOKEN = "BBUS-NYDCvqxBKjKJwImVr9gMrSZ22IsMCR"
+UBIDOTS_DEVICE_LABEL = "esp32-uni268"
 
 @app.route('/receive_data', methods=['POST'])
 def receive_data():
     try:
-        # Extract data from the POST request
         data = request.json
         temperature = data.get('temperature')
         humidity = data.get('humidity')
@@ -21,7 +26,6 @@ def receive_data():
 
         print(f"[INFO] Received data - Temperature: {temperature}, Humidity: {humidity}, Motion Count: {motion_count}")
 
-        # Forward data to Ubidots (optional)
         ubidots_url = f"http://industrial.api.ubidots.com/api/v1.6/devices/{UBIDOTS_DEVICE_LABEL}"
         headers = {"X-Auth-Token": UBIDOTS_TOKEN, "Content-Type": "application/json"}
         payload = {
@@ -29,6 +33,9 @@ def receive_data():
             "humidity": humidity,
             "motion_count": motion_count
         }
+        
+        my_collection.insert_one(data)
+        
         response = requests.post(ubidots_url, headers=headers, json=payload)
         if response.status_code >= 400:
             print(f"[ERROR] Failed to forward data to Ubidots: {response.status_code}")
